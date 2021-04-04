@@ -1,0 +1,37 @@
+aaaaaaaa ICON "wxwin.ico"
+wxwin ICON "wxwin.ico"
+#include <wx/msw/wx.rc>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    0,0,1,0
+PRODUCTVERSION 0,0,1,0
+FILEFLAGSMASK 0x3fL
+#ifdef NDEBUG
+FILEFLAGS 0x0L
+ #else
+FILEFLAGS 0x1L
+#endif
+FILEOS 0x4L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904b0"
+        {
+            VALUE "Comments",         "\0"
+            VALUE "CompanyName",      "BaeByoungYong\0"
+            VALUE "FileDescription",  "SHW-SYSMon\0"
+            VALUE "FileVersion",      "0.0.1.0\0"
+            VALUE "InternalName",     "\0"
+            VALUE "LegalCopyright",   "\0"
+            VALUE "OriginalFilename", "SHW-SYSMon.exe\0"
+            VALUE "ProductName",      "SHW-SYSMon\0"
+            VALUE "ProductVersion",   "0.0.1.0\0"
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x409, 1200
+    }
+}
