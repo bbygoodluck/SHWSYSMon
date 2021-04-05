@@ -69,4 +69,3 @@ void CCPUProcessListView::AddNewProcess(unsigned long ulProcessID)
 {
 	CProcessListViewCommon::AddNewProcess(ulProcessID, eCPUList);
 }
-

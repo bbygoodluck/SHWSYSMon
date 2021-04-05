@@ -19,6 +19,7 @@ public:
 public:
 	virtual void update() override;
 	virtual void AddNewProcess(unsigned long ulProcessID) override;
+
 	void SetItemSelected(const wxString& strSelProcessID);
 
 private:

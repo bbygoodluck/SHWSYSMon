@@ -101,6 +101,10 @@ void CPanelProcess::InitPanel()
 
 	CProcessListViewCommon::SetProcessLists();
 
+	CProcessListViewCommon::AddListViewItem(m_pTotalProcessList.get());
+	CProcessListViewCommon::AddListViewItem(m_pCPUProcessList.get());
+	CProcessListViewCommon::AddListViewItem(m_pMemoryProcessList.get());
+
 	m_pTotalProcessList->InitializeProcessList(eTotalList);
 	m_pCPUProcessList->InitializeProcessList(eCPUList);
 	m_pMemoryProcessList->InitializeProcessList(eMemoryList);

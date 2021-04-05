@@ -3,6 +3,7 @@
 #include "../../dialog/DlgProcessDetail.h"
 
 std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *> CProcessListViewCommon::m_ProcessLists;
+wxVector<CProcessListViewCommon *> CProcessListViewCommon::m_pListViews;
 
 wxBEGIN_EVENT_TABLE(CProcessListViewCommon, wxListCtrl)
 	EVT_MENU_RANGE(CONTEXT_MENU_START, CONTEXT_MENU_END, CProcessListViewCommon::OnListContextMenu)
@@ -13,6 +14,7 @@ CProcessListViewCommon::CProcessListViewCommon(wxWindow* _pParent, const wxSize&
 {
 	m_bitmapKillProcess = wxArtProvider::GetBitmap(wxART_QUIT, wxART_MENU, wxSize(16, 16));
 	m_bitmapDetail = wxArtProvider::GetBitmap(wxART_PLUS, wxART_MENU, wxSize(16, 16));
+	m_bitmapDelItem = wxArtProvider::GetBitmap(wxART_MINUS, wxART_MENU, wxSize(16, 16));
 
 	this->SetTextColour(wxColour(60, 60, 60));
 	this->SetBackgroundColour(wxColour(240, 240, 240));
@@ -271,20 +273,16 @@ void CProcessListViewCommon::CreateContextMenu()
 	m_pContextMenu = new wxMenu();
 
 	CONTEXT_MENU cMenu[] = {
-		{ CONTEXT_MENU_KILL_PROCESS,        wxT("kill process") },
-		{ CONTEXT_MENU_VIEW_PROCESS_DETAIL, wxT("View Dependency")  },
+		{ CONTEXT_MENU_KILL_PROCESS,        wxT("kill process"),    m_bitmapKillProcess},
+		{ CONTEXT_MENU_VIEW_PROCESS_DETAIL, wxT("View Dependency"), m_bitmapDetail},
+		{ CONTEXT_MENU_DEL_LISTITEM,        wxT("Delete Item"),     m_bitmapDelItem},
 	};
 
 	int iMenuCount = WXSIZEOF(cMenu);
 	for(int i = 0; i < iMenuCount; i++)
 	{
 		wxMenuItem* pItem = m_pContextMenu->Append(cMenu[i].iId, cMenu[i].strMenuName);
-
-		if(cMenu[i].iId == CONTEXT_MENU_KILL_PROCESS)
-			pItem->SetBitmap(m_bitmapKillProcess);
-
-		if(cMenu[i].iId == CONTEXT_MENU_VIEW_PROCESS_DETAIL)
-			pItem->SetBitmap(m_bitmapDetail);
+		pItem->SetBitmap(cMenu[i].cmbitmap);
 
 		this->Bind(wxEVT_COMMAND_MENU_SELECTED, &CProcessListViewCommon::OnListContextMenu, this, cMenu[i].iId);
 	}
@@ -381,6 +379,9 @@ void CProcessListViewCommon::OnListContextMenu(wxCommandEvent& event)
 		dlg.ShowModal();
 		dlg.Destroy();
 	}
+
+	if(iID == CONTEXT_MENU_DEL_LISTITEM)
+		CProcessListViewCommon::DelListViewItem(ulProcessID);
 }
 
 void CProcessListViewCommon::OnListItemRightClick( wxListEvent& event )
@@ -390,3 +391,15 @@ void CProcessListViewCommon::OnListItemRightClick( wxListEvent& event )
 
 	this->PopupMenu(m_pContextMenu, pt.x, pt.y);
 }
+
+void CProcessListViewCommon::AddListViewItem(CProcessListViewCommon* pListView)
+{
+	m_pListViews.push_back(pListView);
+}
+
+void CProcessListViewCommon::DelListViewItem(unsigned long ulProcessID)
+{
+	for(auto pView : m_pListViews)
+		pView->DelProcess(ulProcessID);
+}
+
