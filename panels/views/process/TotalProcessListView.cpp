@@ -121,3 +121,8 @@ void CTotalProcessListView::AddNewProcess(unsigned long ulProcessID)
 {
 	CProcessListViewCommon::AddNewProcess(ulProcessID, eTotalList);
 }
+
+void CTotalProcessListView::reload()
+{
+	CProcessListViewCommon::InitializeProcessList(eTotalList);
+}

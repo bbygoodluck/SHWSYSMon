@@ -40,6 +40,7 @@ private:
 	void OnTimer(wxTimerEvent& event);
 	void OnAddDelProcess(wxCommandEvent& event);
 	void OnUpdateProcessInfo(wxCommandEvent& event);
+	void OnProcessReload(wxCommandEvent& event);
 
 	wxDECLARE_EVENT_TABLE();
 };

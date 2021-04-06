@@ -51,17 +51,7 @@ CProcessInfoImpl::CProcessInfoImpl()
 
 CProcessInfoImpl::~CProcessInfoImpl()
 {
-	std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *>::iterator fIter;
-	for (fIter = m_mapProcesses.begin(); fIter != m_mapProcesses.end(); ++fIter)
-	{
-		SHWSYSMON_PROCESS_INFO* pProcessInfo = fIter->second;
-#ifdef __WXMSW__
-		CloseHandle(pProcessInfo->_hProcess);
-#endif // __WXMSW__
-		delete pProcessInfo;
-	}
-
-	m_mapProcesses.clear();
+	Clear();
 }
 
 bool CProcessInfoImpl::Initialize()
@@ -79,6 +69,21 @@ bool CProcessInfoImpl::Initialize()
 
 #endif
     return true;
+}
+
+void CProcessInfoImpl::Clear()
+{
+	std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *>::iterator fIter;
+	for (fIter = m_mapProcesses.begin(); fIter != m_mapProcesses.end(); ++fIter)
+	{
+		SHWSYSMON_PROCESS_INFO* pProcessInfo = fIter->second;
+#ifdef __WXMSW__
+		CloseHandle(pProcessInfo->_hProcess);
+#endif // __WXMSW__
+		delete pProcessInfo;
+	}
+
+	m_mapProcesses.clear();
 }
 
 #ifdef __WXMSW__
@@ -275,6 +280,7 @@ bool CProcessInfoImpl::AddNewProcess(unsigned long ulProcessID)
 	if(pEnumWbemClsObj == nullptr)
 		return false;
 
+	wxSleep(0.3);
 	InitProcessInfo(pEnumWbemClsObj);
 	SafeRelease(&pEnumWbemClsObj);
 
@@ -428,4 +434,10 @@ SHWSYSMON_PROCESS_INFO* CProcessInfoImpl::GetProcessInfo(unsigned long ulProcess
 		return nullptr;
 
 	return iter->second;
+}
+
+void CProcessInfoImpl::AllClearAndReload()
+{
+	Clear();
+	Initialize();
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+	<object class="wxMenuBar" name="SHWSYSMONMenu">
+		<label></label>
+		<object class="wxMenu" name="menuSystem">
+			<label>시스템</label>
+			<object class="wxMenuItem" name="systemProcessReload">
+				<label>Process 다시읽기</label>
+				<bitmap stock_id="wxART_REPORT_VIEW" stock_client="wxART_MENU">undefined.png</bitmap>
+				<help></help>
+			</object>
+		</object>
+	</object>
+</resource>

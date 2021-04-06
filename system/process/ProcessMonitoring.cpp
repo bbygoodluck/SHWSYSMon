@@ -10,6 +10,7 @@ wxBEGIN_EVENT_TABLE(CProcessMonitoring, CResourceCommon)
 	EVT_TIMER(ENUM_PROCESS_TIMER_ID, CProcessMonitoring::OnTimer)
 	EVT_MY_CUSTOM_COMMAND(wxEVT_EVENT_NOTIFY_ADD_DELPROCESS, wxID_ANY, CProcessMonitoring::OnAddDelProcess)
 	EVT_MY_CUSTOM_COMMAND(wxEVT_EVENT_NOTIFY_UPDATE_PROCESSINFO, wxID_ANY, CProcessMonitoring::OnUpdateProcessInfo)
+	EVT_MY_CUSTOM_COMMAND(wxEVT_EVENT_PROCESS_RELOAD, wxID_ANY, CProcessMonitoring::OnProcessReload)
 wxEND_EVENT_TABLE()
 
 CProcessMonitoring::CProcessMonitoring()
@@ -103,4 +104,33 @@ void CProcessMonitoring::OnUpdateProcessInfo(wxCommandEvent& event)
 int CProcessMonitoring::KillProcess(unsigned long ulProcessID)
 {
 	return m_ProcessImpl->KillProcess(ulProcessID);
+}
+
+void CProcessMonitoring::OnProcessReload(wxCommandEvent& event)
+{
+	wxBusyInfo info
+    (
+        wxBusyInfoFlags()
+            .Parent(nullptr)
+            .Icon(wxArtProvider::GetIcon(wxART_EXECUTABLE_FILE,
+                                         wxART_OTHER, wxSize(64, 64)))
+            .Title("<b>Regathering process information...</b>")
+            .Text("please wait...")
+            .Foreground(*wxWHITE)
+            .Background(wxColour(100, 100, 100))
+            .Transparency(5 * (wxALPHA_OPAQUE / 5))
+    );
+
+	m_timer.Stop();
+
+	for(auto item : m_notifyItems)
+		((CProcessListViewCommon *)item)->allclear();
+
+	m_ProcessImpl->AllClearAndReload();
+
+	CProcessListViewCommon::SetProcessLists();
+	for(auto item : m_notifyItems)
+		((CProcessListViewCommon *)item)->reload();
+
+	m_timer.Start(1000);
 }

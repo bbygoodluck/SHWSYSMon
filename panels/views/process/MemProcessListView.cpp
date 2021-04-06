@@ -94,3 +94,8 @@ void CMemProcessListView::AddNewProcess(unsigned long ulProcessID)
 {
 	CProcessListViewCommon::AddNewProcess(ulProcessID, eMemoryList);
 }
+
+void CMemProcessListView::reload()
+{
+	CProcessListViewCommon::InitializeProcessList(eMemoryList);
+}

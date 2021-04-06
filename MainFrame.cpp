@@ -1,6 +1,7 @@
 #include "ginc.h"
 #include "MainFrame.h"
 #include "SHWSYSStatusBar.h"
+#include "EventHandler.h"
 
 #include "./panels/PanelCPU.h"
 #include "./panels/PanelProcess.h"
@@ -17,6 +18,16 @@ CMainFrame::CMainFrame(const wxString& strTitle)
 {
 	SetIcon(wxIcon("wxwin"));
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxMenuBar* pMenuBar = wxXmlResource::Get()->LoadMenuBar(this, wxT("SHWSYSMONMenu"));
+	if (pMenuBar == nullptr)
+	{
+		wxMessageBox(wxT("Failed to load MenuBar resource"), PROGRAM_FULL_NAME, wxOK | wxICON_ERROR);
+		return;
+	}
+
+	SetMenuBar(pMenuBar);
+	RegisterEventHandler();
 
 	Initialize();
 
@@ -94,6 +105,7 @@ void CMainFrame::OnClose(wxCloseEvent& event)
 	theSettings->SetChnageOptionVal(wxT("Width"), szFrame.GetWidth());
 	theSettings->SetChnageOptionVal(wxT("Height"), szFrame.GetHeight());
 
+	PopEventHandler(true);
 	Destroy();
 }
 
@@ -105,4 +117,10 @@ void CMainFrame::OnMaximized(wxMaximizeEvent& event)
 void CMainFrame::OnIconized(wxIconizeEvent& event)
 {
 
+}
+
+void CMainFrame::RegisterEventHandler()
+{
+	m_pSHFEventHandler = new CEventHandler(this);
+	PushEventHandler(m_pSHFEventHandler);
 }

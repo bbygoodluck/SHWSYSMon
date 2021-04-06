@@ -4,6 +4,8 @@
 class CPanelCPU;
 class CPanelProcess;
 class CSHWSYSStatusBar;
+class CEventHandler;
+
 class CMainFrame : public wxFrame
 {
 
@@ -13,6 +15,7 @@ public:
 
 private:
 	void Initialize();
+	void RegisterEventHandler();
 
 private:
 	std::unique_ptr<CSHWSYSStatusBar> m_statusBarSummary;
@@ -20,6 +23,7 @@ private:
 	wxAuiNotebook* m_auiNoteBookProcess;
 	CPanelCPU* m_panelCPU;
 	CPanelProcess* m_panelProcess;
+	CEventHandler*	m_pSHFEventHandler;
 
 private:
 	void OnClose(wxCloseEvent& event);

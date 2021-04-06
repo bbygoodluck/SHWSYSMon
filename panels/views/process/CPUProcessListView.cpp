@@ -69,3 +69,8 @@ void CCPUProcessListView::AddNewProcess(unsigned long ulProcessID)
 {
 	CProcessListViewCommon::AddNewProcess(ulProcessID, eCPUList);
 }
+
+void CCPUProcessListView::reload()
+{
+	CProcessListViewCommon::InitializeProcessList(eCPUList);
+}

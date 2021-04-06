@@ -14,6 +14,7 @@
 #include <wx/display.h>
 #include <wx/listctrl.h>
 #include <wx/busyinfo.h>
+#include <wx/xrc/xmlres.h>
 
 //included std
 #include <memory>

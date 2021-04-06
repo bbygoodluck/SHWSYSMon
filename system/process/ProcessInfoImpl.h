@@ -18,9 +18,12 @@ public:
 	bool AddNewProcess(unsigned long ulProcessID);
 	bool DelProcess(unsigned long ulProcessID);
 	int KillProcess(unsigned long ulProcessID);
+	void AllClearAndReload();
 
 private:
 	bool Initialize();
+	void Clear();
+
 #ifdef __WXMSW__
 	IEnumWbemClassObject* ExecWMIQuery(const wxString& strQuery);
 	bool SetEnableTokenPrivilege(LPCTSTR pszPrivilege);

@@ -18,6 +18,7 @@ public:
 
 public:
 	virtual void update() override;
+	virtual void reload() override;
 	virtual void AddNewProcess(unsigned long ulProcessID) override;
 
 	void SetItemSelected(const wxString& strSelProcessID);

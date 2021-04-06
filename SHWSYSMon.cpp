@@ -30,6 +30,12 @@ CSHWSYSMon::~CSHWSYSMon()
 
 bool CSHWSYSMon::OnInit()
 {
+	if (!wxApp::OnInit())
+	{
+		wxMessageBox(wxT("윈도우 초기화 실패 : wxApp::OnInit()"), PROGRAM_FULL_NAME, wxOK | wxICON_ERROR);
+		return false;
+	}
+
 	theUtility->LoadImageList();
 #ifdef NDEBUG
 	m_pSingleInstance = new wxSingleInstanceChecker;
@@ -47,6 +53,17 @@ bool CSHWSYSMon::OnInit()
 	if(!OnLoadSettings())
 		return false;
 
+	//메뉴읽기
+	wxXmlResource::Get()->InitAllHandlers();
+	wxString strMenuFile = theUtility->GetWorkingDirectory() + SLASH + wxT("xrc") + SLASH + wxT("menu.xrc");
+	bool bXRCLoaded = wxXmlResource::Get()->Load(strMenuFile);
+
+	if (!bXRCLoaded)
+	{
+		wxMessageBox(wxT("메뉴 파일 읽기가 실패하였습니다."), PROGRAM_FULL_NAME, wxOK | wxICON_ERROR);
+		return false;
+	}
+
 	wxString strPGTitle = PROGRAM_FULL_NAME + ENV_OS_VER;
 
 #ifndef NDEBUG
@@ -57,8 +74,8 @@ bool CSHWSYSMon::OnInit()
 	CreateCOMInstance();
 	InitializeCriticalSection(&_gCriProcess);
 	InitializeCriticalSection(&_gCriEventSink);
-
 #endif // __WXMSW__
+
 	CMainFrame* pMainFrame = new CMainFrame(strPGTitle);
 	pMainFrame->Show();
 

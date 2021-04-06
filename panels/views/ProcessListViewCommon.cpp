@@ -403,3 +403,7 @@ void CProcessListViewCommon::DelListViewItem(unsigned long ulProcessID)
 		pView->DelProcess(ulProcessID);
 }
 
+void CProcessListViewCommon::allclear()
+{
+	this->DeleteAllItems();
+}

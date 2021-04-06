@@ -63,6 +63,8 @@ public:
 	~CProcessListViewCommon ();
 
 	virtual void update() = 0;
+	virtual void reload() = 0;
+
 	virtual void AddNewProcess(unsigned long ulProcessID) = 0;
 	virtual void AddNewProcess(unsigned long ulProcessID, eProcessListView _enumList);
 	virtual void InitializeProcessList(eProcessListView _enumList);
@@ -74,6 +76,7 @@ public:
 	int GetSortingColumn() { return m_iSortingColumn; }
 	bool IsAscending() { return m_bAscending; }
 	void DelProcess(unsigned long ulProcess);
+	void allclear();
 
 protected:
 	static int wxCALLBACK ListCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData);
