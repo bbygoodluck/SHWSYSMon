@@ -234,7 +234,7 @@ void CProcessInfoImpl::InitProcessInfo(IEnumWbemClassObject* pEnumWbemClsObj)
 
 		pProcessInfo->_ulProcessID = (unsigned long)vProcessId.lVal;
 		pProcessInfo->_strProcessName = vProcessName.bstrVal;
-		pProcessInfo->_strCommandLine = vExecutablePath.bstrVal;
+		pProcessInfo->_strCommandLine = vCommandLine.bstrVal;
 		pProcessInfo->_strProcessFullPath = vExecutablePath.bstrVal;
 		pProcessInfo->fCPUUsage = 0.0f;
 		pProcessInfo->_PrivateSize = 0;
