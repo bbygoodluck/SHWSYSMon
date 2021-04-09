@@ -15,6 +15,7 @@ CProcessListViewCommon::CProcessListViewCommon(wxWindow* _pParent, const wxSize&
 	m_bitmapKillProcess = wxArtProvider::GetBitmap(wxART_QUIT, wxART_MENU, wxSize(16, 16));
 	m_bitmapDetail = wxArtProvider::GetBitmap(wxART_PLUS, wxART_MENU, wxSize(16, 16));
 	m_bitmapDelItem = wxArtProvider::GetBitmap(wxART_MINUS, wxART_MENU, wxSize(16, 16));
+	m_bitmapUpdate = wxArtProvider::GetBitmap(wxART_FIND_AND_REPLACE, wxART_MENU, wxSize(16, 16));
 
 	this->SetTextColour(wxColour(60, 60, 60));
 	this->SetBackgroundColour(wxColour(240, 240, 240));
@@ -276,6 +277,7 @@ void CProcessListViewCommon::CreateContextMenu()
 		{ CONTEXT_MENU_KILL_PROCESS,        wxT("kill process"),    m_bitmapKillProcess},
 		{ CONTEXT_MENU_VIEW_PROCESS_DETAIL, wxT("View Dependency"), m_bitmapDetail},
 		{ CONTEXT_MENU_DEL_LISTITEM,        wxT("Delete Item"),     m_bitmapDelItem},
+		{ CONTEXT_MENU_UPDATE_PROCESSINFO,  wxT("Update Info"),     m_bitmapUpdate},
 	};
 
 	int iMenuCount = WXSIZEOF(cMenu);
@@ -382,6 +384,9 @@ void CProcessListViewCommon::OnListContextMenu(wxCommandEvent& event)
 
 	if(iID == CONTEXT_MENU_DEL_LISTITEM)
 		CProcessListViewCommon::DelListViewItem(ulProcessID);
+
+	if(iID == CONTEXT_MENU_UPDATE_PROCESSINFO)
+		UpdateProcessInfo(ulProcessID);
 }
 
 void CProcessListViewCommon::OnListItemRightClick( wxListEvent& event )
@@ -406,4 +411,16 @@ void CProcessListViewCommon::DelListViewItem(unsigned long ulProcessID)
 void CProcessListViewCommon::allclear()
 {
 	this->DeleteAllItems();
+}
+
+void CProcessListViewCommon::UpdateProcessInfo(unsigned long ulProcessID)
+{
+	wxString strMsg(wxString::Format(wxT("ProcessId : %u"), ulProcessID));
+	if(!theSystem->UpdateProcessInfo(ulProcessID))
+	{
+		wxMessageBox(strMsg + wxT("  정보 갱신이 실패했습니다."), PROGRAM_FULL_NAME, wxICON_ERROR | wxOK);
+		return;
+	}
+
+	wxMessageBox(strMsg + wxT(" 정보갱신이 성공하였습니다."), PROGRAM_FULL_NAME, wxICON_EXCLAMATION | wxOK);
 }

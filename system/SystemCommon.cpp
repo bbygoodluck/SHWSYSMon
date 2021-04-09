@@ -85,7 +85,7 @@ int CSystemCommon::KillProcess(unsigned long ulProcessID)
 	if(!pMonitoring)
 		return KILL_PROCESS_MSG_PROCESS_NULL;
 
-	return pMonitoring->KillProcess(ulProcessID);
+	return pMonitoring->m_ProcessImpl->KillProcess(ulProcessID);
 }
 
 SHWSYSMON_PROCESS_INFO* CSystemCommon::GetProcessInfo(unsigned long ulProcessID)
@@ -94,5 +94,14 @@ SHWSYSMON_PROCESS_INFO* CSystemCommon::GetProcessInfo(unsigned long ulProcessID)
 	if(!pMonitoring)
 		return nullptr;
 
-	return pMonitoring->GetProcessInfo(ulProcessID);
+	return pMonitoring->m_ProcessImpl->GetProcessInfo(ulProcessID);
+}
+
+bool CSystemCommon::UpdateProcessInfo(unsigned long ulProcessID)
+{
+	CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);
+	if(!pMonitoring)
+		return false;
+
+	return pMonitoring->m_ProcessImpl->Update(ulProcessID);
 }

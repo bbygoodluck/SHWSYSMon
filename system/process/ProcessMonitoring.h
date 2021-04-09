@@ -2,8 +2,8 @@
 #define PROCESSMONITORING_H_INCLUDED
 
 #include "../ResourceCommon.h"
+#include "ProcessInfoImpl.h"
 class CSystemCommon;
-class CProcessInfoImpl;
 class CProcessTrace;
 
 class CProcessMonitoring : public CResourceCommon
@@ -22,12 +22,9 @@ public:
 
 	std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *>& GetProcessInfo();
 	SHWSYSMON_PROCESS_INFO * GetProcessInfo(unsigned long ulProcessID);
-	void Update();
-	void Update(SHWSYSMON_PROCESS_INFO *pProcessInfo);
 
 	void AddNewProcess(unsigned long ulProcessID);
 	void DelProcess(unsigned long ulProcessID);
-	int KillProcess(unsigned long ulProcessID);
 
 protected:
 	std::unique_ptr<CProcessInfoImpl> m_ProcessImpl;

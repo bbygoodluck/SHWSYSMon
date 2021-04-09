@@ -13,6 +13,7 @@ public:
 public:
 	void Update();
 	void Update(SHWSYSMON_PROCESS_INFO* pProcessInfo);
+	bool Update(unsigned long ulProcessID);
 
 	SHWSYSMON_PROCESS_INFO* GetProcessInfo(unsigned long ulProcessID);
 	bool AddNewProcess(unsigned long ulProcessID);

@@ -71,17 +71,22 @@ void CUtility::LoadImageList()
 void CUtility::GetIconIndexFromImageList(const wxString& strFullPath, int &iIconIndex, int& iOverlayIndex)
 {
 #ifdef __WXMSW__
+	iIconIndex = 0;
+	iOverlayIndex = 0;
+
 	SHFILEINFO sfi;
 	wxZeroMemory(sfi);
 
 	DWORD dwNum = GetFileAttributes(strFullPath);
+	if(dwNum != INVALID_FILE_ATTRIBUTES)
+	{
+		SHGetFileInfo(strFullPath, dwNum, &sfi, sizeof(sfi), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_OVERLAYINDEX);
 
-	SHGetFileInfo(strFullPath, dwNum, &sfi, sizeof(sfi), SHGFI_ICON | SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_OVERLAYINDEX);
+		iIconIndex = (sfi.iIcon & 0x00FFFFFF);
+		iOverlayIndex = (sfi.iIcon >> 24) - 1;
 
-	iIconIndex = (sfi.iIcon & 0x00FFFFFF);
-	iOverlayIndex = (sfi.iIcon >> 24) - 1;
-
-	DestroyIcon(sfi.hIcon);
+		DestroyIcon(sfi.hIcon);
+	}
 #else
 #endif
 }

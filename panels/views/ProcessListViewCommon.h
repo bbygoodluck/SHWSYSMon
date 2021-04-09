@@ -55,7 +55,8 @@ protected:
 	enum eContextMenu {
 		CONTEXT_MENU_KILL_PROCESS = CONTEXT_MENU_START,
 		CONTEXT_MENU_VIEW_PROCESS_DETAIL,
-		CONTEXT_MENU_DEL_LISTITEM
+		CONTEXT_MENU_DEL_LISTITEM,
+		CONTEXT_MENU_UPDATE_PROCESSINFO,
 	};
 
 public:
@@ -89,6 +90,7 @@ protected:
 
 private:
 	void CreateContextMenu();
+	void UpdateProcessInfo(unsigned long ulProcessID);
 
 public:
 	static std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *> m_ProcessLists;
@@ -105,6 +107,7 @@ private:
 	wxBitmap m_bitmapKillProcess;
 	wxBitmap m_bitmapDetail;
 	wxBitmap m_bitmapDelItem;
+	wxBitmap m_bitmapUpdate;
 
 	static wxVector<CProcessListViewCommon *> m_pListViews;
 private:

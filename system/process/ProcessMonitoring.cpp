@@ -1,7 +1,6 @@
 #include "../../ginc.h"
 #include "../SystemCommon.h"
 #include "ProcessMonitoring.h"
-#include "ProcessInfoImpl.h"
 #include "../../panels/views/ProcessListViewCommon.h"
 
 #include "ProcessTrace.h"
@@ -35,19 +34,9 @@ void CProcessMonitoring::notify()
 	wxQueueEvent(this, evt.Clone());
 }
 
-void CProcessMonitoring::Update()
-{
-	m_ProcessImpl->Update();
-}
-
 SHWSYSMON_PROCESS_INFO * CProcessMonitoring::GetProcessInfo(unsigned long ulProcessID)
 {
 	return m_ProcessImpl->GetProcessInfo(ulProcessID);
-}
-
-void CProcessMonitoring::Update(SHWSYSMON_PROCESS_INFO *pProcessInfo)
-{
-	m_ProcessImpl->Update(pProcessInfo);
 }
 
 std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *>& CProcessMonitoring::GetProcessInfo()
@@ -101,10 +90,10 @@ void CProcessMonitoring::OnUpdateProcessInfo(wxCommandEvent& event)
 
 }
 
-int CProcessMonitoring::KillProcess(unsigned long ulProcessID)
-{
-	return m_ProcessImpl->KillProcess(ulProcessID);
-}
+//int CProcessMonitoring::KillProcess(unsigned long ulProcessID)
+//{
+//	return m_ProcessImpl->KillProcess(ulProcessID);
+//}
 
 void CProcessMonitoring::OnProcessReload(wxCommandEvent& event)
 {

@@ -26,6 +26,8 @@ public:
 	unsigned long GetTotalMemory();
 
 	int KillProcess(unsigned long ulProcessID);
+	bool UpdateProcessInfo(unsigned long ulProcessID);
+
 private:
 
 private:

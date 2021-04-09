@@ -349,6 +349,26 @@ void CProcessInfoImpl::Update(SHWSYSMON_PROCESS_INFO* pProcessInfo)
 	UpdateProcessCPU(pProcessInfo);
 }
 
+bool CProcessInfoImpl::Update(unsigned long ulProcessID)
+{
+	PINFO_CONST_ITERATOR iter = m_mapProcesses.find(ulProcessID);
+	if(iter == m_mapProcesses.end())
+		return false;
+
+	SHWSYSMON_PROCESS_INFO* pProcessInfo = iter->second;
+	theUtility->GetIconIndexFromImageList(pProcessInfo->_strProcessFullPath, pProcessInfo->iIconIndex, pProcessInfo->iOvelayIndex);
+
+	CFileVersionInfo data;
+	bool bFileVersion = data.Create(pProcessInfo->_strProcessFullPath);
+	if(!bFileVersion)
+		return false;
+
+	pProcessInfo->_strFileDescription = data.GetFileDescription();
+	pProcessInfo->_strCompanyName = data.GetCompanyName();
+
+	return true;
+}
+
 void CProcessInfoImpl::InitProcessCPU(SHWSYSMON_PROCESS_INFO* pProcessInfo)
 {
 	if(pProcessInfo->_hProcess == NULL)
