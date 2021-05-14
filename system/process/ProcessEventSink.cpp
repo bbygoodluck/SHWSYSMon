@@ -45,6 +45,7 @@ HRESULT CEventSink::Indicate(LONG lObjectCount, IWbemClassObject __RPC_FAR* __RP
 {
 	EnterCriticalSection(&_gCriEventSink);
 	HRESULT hr = S_OK;
+
 	for(int i = 0; i < lObjectCount; i++)
 	{
 		VARIANT vtProp;
@@ -74,13 +75,8 @@ HRESULT CEventSink::Indicate(LONG lObjectCount, IWbemClassObject __RPC_FAR* __RP
 
 		CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);
 		wxQueueEvent(pMonitoring, evt.Clone());
-		/*
-		if(m_pAddNewProcess)
-			theSystem->GetMonitoringObj()->AddNewProcess(ulProcessID);
-		else
-			theSystem->GetMonitoringObj()->DelProcess(ulProcessID);
-		*/
 	}
+
 	LeaveCriticalSection(&_gCriEventSink);
 	return WBEM_S_NO_ERROR;
 }

@@ -39,8 +39,10 @@ private:
 	int m_iViewportMaxX = -1;
 	int m_iViewportMaxY = -1;
 	int m_iPercent = 0;
+
 	unsigned long m_lCPUData = 0;
 	GRAPH_DATA_NODE* m_headNode = nullptr;
+	GRAPH_DATA_NODE* m_tailNode = nullptr;
 
 private:
 	virtual void OnPaint(wxPaintEvent& event) override;

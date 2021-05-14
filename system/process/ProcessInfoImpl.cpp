@@ -296,16 +296,20 @@ bool CProcessInfoImpl::DelProcess(unsigned long ulProcessID)
 	SHWSYSMON_PROCESS_INFO* pProcess = iter->second;
 	CloseHandle(pProcess->_hProcess);
 
+	delete pProcess;
 	m_mapProcesses.erase(iter);
 	return true;
 }
 
 int CProcessInfoImpl::KillProcess(unsigned long ulProcessID)
 {
+	unsigned long ulRetCode = -1;
+	int iRetCode = 0;
 	PINFO_CONST_ITERATOR iter = m_mapProcesses.find(ulProcessID);
 	if(iter == m_mapProcesses.end())
 		return KILL_PROCESS_MSG_PROCESS_NULL;
 
+#ifdef __WXMSW__
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, ulProcessID);
 
 	if(hProcess != NULL)
@@ -314,16 +318,26 @@ int CProcessInfoImpl::KillProcess(unsigned long ulProcessID)
 		if(!bTerminate)
 			return KILL_PROCESS_MSG_PROCESS_TERMINATE_FAIL;
 
-		unsigned long ulRetCode = 0;
 		GetExitCodeProcess(hProcess, &ulRetCode);
 
 		if (ulRetCode == STILL_ACTIVE)
 			return KILL_PROCESS_MSG_PROCESS_ALIVE;
 
-		return KILL_PROCESS_MSG_SUCCESS;
+		iRetCode = KILL_PROCESS_MSG_SUCCESS;
 	}
+	else
+		iRetCode = KILL_PROCESS_MSG_PROCESS_NULL;
+#endif // __WXMSW__
 
-	return KILL_PROCESS_MSG_PROCESS_NULL;
+	SHWSYSMON_PROCESS_INFO* pProcess = iter->second;
+
+#ifdef __WXMSW__
+	CloseHandle(pProcess->_hProcess);
+#endif // __WXMSW__
+
+	delete pProcess;
+
+	return iRetCode;
 }
 
 void CProcessInfoImpl::Update()

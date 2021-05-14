@@ -1,12 +1,12 @@
 {
     "globalsettings": {
         "AutoSave": 1,
-        "DispMonitor": 0,
+        "DispMonitor": 1,
         "Maximized": 0,
         "XPos": 100,
         "YPos": 1379,
-        "Width": 1844,
-        "Height": 1079,
+        "Width": 1859,
+        "Height": 1009,
         "CPUViewHeignt": 40,
         "CPUMEMListWidth": 550,
         "CPUCoreDisplayInRow": 8,

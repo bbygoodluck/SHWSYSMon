@@ -21,6 +21,7 @@ CViewCommon::~CViewCommon()
 wxMemoryDC* CViewCommon::CreateMemoryDC(wxDC* pDC, const wxRect& rc, const wxColour& colPen, const wxColour colBrush)
 {
 	m_pMemDC = std::make_unique<wxMemoryDC>(pDC);
+
 	m_pMemDC->SelectObject(*m_pDoubleBuffer);
 	m_pMemDC->SetFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FIXED_FONT));
 

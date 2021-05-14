@@ -25,10 +25,19 @@ void CCPUUsageGraphView::ClearData()
 	GRAPH_DATA_NODE* pCurrNode = m_headNode;
 	while (pCurrNode != nullptr)
 	{
-		GRAPH_DATA_NODE* tmpTarget = pCurrNode;
-		pCurrNode = pCurrNode->_next;
-		delete tmpTarget;
+		m_headNode = pCurrNode->_next;
+		delete pCurrNode;
+		pCurrNode = m_headNode;
 	}
+
+	delete m_headNode;
+//	GRAPH_DATA_NODE* pCurrNode = m_headNode;
+//	while (pCurrNode != nullptr)
+//	{
+//		GRAPH_DATA_NODE* tmpTarget = pCurrNode;
+//		pCurrNode = pCurrNode->_next;
+//		delete tmpTarget;
+//	}
 }
 
 void CCPUUsageGraphView::OnErase(wxEraseEvent& event)
@@ -100,18 +109,17 @@ void CCPUUsageGraphView::Render(wxDC* pDC)
 	}
 
 	DrawGraph(pDC);
-	if(theSettings->GetCPUUsageDisplay())
+	if (!m_strDispText.IsEmpty())
 	{
-		if (!m_strDispText.IsEmpty())
-		{
-			wxString strDisp = m_strDispText + wxString::Format(wxT(" : %02d"), m_iPercent) + wxT("%");
+		wxString strDisp = m_strDispText;
+		if(theSettings->GetCPUUsageDisplay())
+			strDisp += wxString::Format(wxT(" : %02d"), m_iPercent) + wxT("%");
 
-			pDC->SetTextForeground(wxColour(150, 150, 150));
-			pDC->DrawText(strDisp, m_iViewportMaxX + 5, m_iViewportMaxY + 2);
+		pDC->SetTextForeground(wxColour(150, 150, 150));
+		pDC->DrawText(strDisp, m_iViewportMaxX + 5, m_iViewportMaxY + 2);
 
-			pDC->SetTextForeground(wxColour(240, 240, 240));
-			pDC->DrawText(strDisp, m_iViewportMaxX + 4, m_iViewportMaxY + 1);
-		}
+		pDC->SetTextForeground(wxColour(240, 240, 240));
+		pDC->DrawText(strDisp, m_iViewportMaxX + 4, m_iViewportMaxY + 1);
 	}
 }
 
@@ -138,7 +146,9 @@ void CCPUUsageGraphView::DrawGraph(wxDC* pDC)
 	int iYTop = m_iViewportMaxY;
 	int iYBottom = 0;
 
-	if (m_headNode == nullptr || m_headNode->_next == nullptr)
+//	if (m_headNode == nullptr || m_headNode->_next == nullptr)
+//		return;
+	if(m_headNode == m_tailNode)
 		return;
 
 	int iXPos = -1;
@@ -147,7 +157,8 @@ void CCPUUsageGraphView::DrawGraph(wxDC* pDC)
 	int x2;
 	int y2;
 
-	GRAPH_DATA_NODE* pCurrNode = m_headNode->_next;
+//	GRAPH_DATA_NODE* pCurrNode = m_headNode->_next;
+	GRAPH_DATA_NODE* pCurrNode = m_headNode;
 
 	while (pCurrNode != nullptr)
 	{
@@ -204,30 +215,52 @@ void CCPUUsageGraphView::update()
 
 	if (m_headNode == nullptr)
 	{
-		m_headNode = new GRAPH_DATA_NODE;
-		m_headNode->_next = _dataNode;
+	//	m_headNode = new GRAPH_DATA_NODE;
+	//	m_headNode->_next = _dataNode;
+		m_headNode = _dataNode;
+		m_tailNode = _dataNode;
 	}
 	else
 	{
-		GRAPH_DATA_NODE* pLastNode = m_headNode;
-		GRAPH_DATA_NODE* pTmpNode = m_headNode->_next;
-		while (pTmpNode != nullptr)
-		{
-			if (pLastNode->_next != nullptr)
-				pLastNode = pLastNode->_next;
+		m_tailNode->_next = _dataNode;
+		m_tailNode = _dataNode;
 
-			pTmpNode->_iXPos -= CONST_ONE_SECOND;
-			pTmpNode = pTmpNode->_next;
+		GRAPH_DATA_NODE* pCurrNode = m_headNode;
+		while (pCurrNode != nullptr)
+		{
+			pCurrNode->_iXPos -= CONST_ONE_SECOND;
+			pCurrNode = pCurrNode->_next;
+
+			if(pCurrNode == m_tailNode)
+				break;
 		}
 
-		pLastNode->_next = _dataNode;
-
-		GRAPH_DATA_NODE* firstNode = m_headNode->_next;
+		GRAPH_DATA_NODE* firstNode = m_headNode;
 		if (firstNode->_iXPos <= m_iViewportMaxX)
 		{
-			m_headNode->_next = firstNode->_next;
+			m_headNode = firstNode->_next;
 			delete firstNode;
 		}
+
+	//	GRAPH_DATA_NODE* pLastNode = m_headNode;
+	//	GRAPH_DATA_NODE* pTmpNode = m_headNode->_next;
+	//	while (pTmpNode != nullptr)
+	//	{
+	//		if (pLastNode->_next != nullptr)
+	//			pLastNode = pLastNode->_next;
+
+	//		pTmpNode->_iXPos -= CONST_ONE_SECOND;
+	//		pTmpNode = pTmpNode->_next;
+	//	}
+
+	//	pLastNode->_next = _dataNode;
+
+	//	GRAPH_DATA_NODE* firstNode = m_headNode->_next;
+	//	if (firstNode->_iXPos <= m_iViewportMaxX)
+	//	{
+	//		m_headNode->_next = firstNode->_next;
+	//		delete firstNode;
+	//	}
 	}
 
 	if (m_iAddCount == 10)
