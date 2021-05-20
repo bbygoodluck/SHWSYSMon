@@ -97,6 +97,24 @@ SHWSYSMON_PROCESS_INFO* CSystemCommon::GetProcessInfo(unsigned long ulProcessID)
 	return pMonitoring->m_ProcessImpl->GetProcessInfo(ulProcessID);
 }
 
+PINFO_CONST_ITERATOR CSystemCommon::GetProcessMapConstBeing()
+{
+	CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);
+	if(!pMonitoring)
+		return (PINFO_CONST_ITERATOR)0;
+
+	return pMonitoring->m_ProcessImpl->GetProcessaMapConstBegin();
+}
+
+PINFO_CONST_ITERATOR CSystemCommon::GetProcessMapConstEnd()
+{
+	CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);
+	if(!pMonitoring)
+		return (PINFO_CONST_ITERATOR)0;
+
+	return pMonitoring->m_ProcessImpl->GetProcessaMapConstEnd();
+}
+
 bool CSystemCommon::UpdateProcessInfo(unsigned long ulProcessID)
 {
 	CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);

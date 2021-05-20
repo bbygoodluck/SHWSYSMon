@@ -21,6 +21,18 @@ public:
 	int KillProcess(unsigned long ulProcessID);
 	void AllClearAndReload();
 
+	PINFO_CONST_ITERATOR GetProcessaMapConstBegin()
+	{
+		PINFO_CONST_ITERATOR constIter = m_mapProcesses.begin();
+		return constIter;
+	}
+
+	PINFO_CONST_ITERATOR GetProcessaMapConstEnd()
+	{
+		PINFO_CONST_ITERATOR constIter = m_mapProcesses.end();
+		return constIter;
+	}
+
 private:
 	bool Initialize();
 	void Clear();

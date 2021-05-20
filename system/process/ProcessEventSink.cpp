@@ -43,7 +43,7 @@ HRESULT CEventSink::QueryInterface(REFIID riid, void** ppv)
 
 HRESULT CEventSink::Indicate(LONG lObjectCount, IWbemClassObject __RPC_FAR* __RPC_FAR* apObjArray)
 {
-	EnterCriticalSection(&_gCriEventSink);
+//	EnterCriticalSection(&_gCriEventSink);
 	HRESULT hr = S_OK;
 
 	for(int i = 0; i < lObjectCount; i++)
@@ -74,10 +74,13 @@ HRESULT CEventSink::Indicate(LONG lObjectCount, IWbemClassObject __RPC_FAR* __RP
 		evt.SetString(strAddDel);
 
 		CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);
-		wxQueueEvent(pMonitoring, evt.Clone());
+	//	wxQueueEvent(pMonitoring, evt.Clone());
+		wxPostEvent(pMonitoring, evt);
+
+		SafeRelease(&pUnk);
 	}
 
-	LeaveCriticalSection(&_gCriEventSink);
+//	LeaveCriticalSection(&_gCriEventSink);
 	return WBEM_S_NO_ERROR;
 }
 

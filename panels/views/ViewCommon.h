@@ -12,6 +12,8 @@ public:
 
 public:
 	virtual void update() = 0;
+	virtual void SetUsageData(unsigned long _data) = 0;
+
 	void SetDispText(const wxString& strDisp) { m_strDispText = strDisp; }
 
 	void SetCPUCoreNumber(int iCPUNumber) { m_iCPUCoreNum = iCPUNumber;	}
@@ -35,6 +37,8 @@ protected:
 	wxSize m_szChagned;
 	wxString m_strDispText = wxT("");
 	int m_iCPUCoreNum = -1;
+	unsigned long m_lCPUData = 0;
+	int m_iPercent = 0;
 
 private:
 	std::unique_ptr<wxMemoryDC> m_pMemDC = nullptr;

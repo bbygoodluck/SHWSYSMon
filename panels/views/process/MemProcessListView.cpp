@@ -56,13 +56,9 @@ void CMemProcessListView::update()
 		unsigned long _ulProcessID = 0;
 		strProcessID.ToCULong(&_ulProcessID);
 
-		PINFO_CONST_ITERATOR fIter = m_ProcessLists.find(_ulProcessID);
-		if(fIter == m_ProcessLists.end())
+		SHWSYSMON_PROCESS_INFO* pProcessInfo = theSystem->GetProcessInfo(_ulProcessID);
+		if(pProcessInfo == nullptr)
 			continue;
-
-		SHWSYSMON_PROCESS_INFO* pProcessInfo = fIter->second;//theSystem->GetProcessInfo(_ulProcessID);
-//		if(pProcessInfo == nullptr)
-//			continue;
 
 		fPrivateSize = (float)(pProcessInfo->_PrivateSize / (1024.0f));
 		strPrivateSize = wxT("");

@@ -100,7 +100,7 @@ bool CSHWSYSMon::OnLoadSettings()
 void CSHWSYSMon::CreateCOMInstance()
 {
 	//WMI이용을 위한 COM객체 생성
-	HRESULT hResult = CoInitialize(NULL);//Ex(NULL, COINIT_APARTMENTTHREADED);
+	HRESULT hResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
     if (FAILED(hResult))
     {
 		theUtility->ShowMessage(wxString::Format(wxT("Failed to initialize COM library. Error code = %0x"), GetLastError()), wxOK | wxICON_ERROR);

@@ -2,7 +2,6 @@
 #include "ProcessListViewCommon.h"
 #include "../../dialog/DlgProcessDetail.h"
 
-std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *> CProcessListViewCommon::m_ProcessLists;
 wxVector<CProcessListViewCommon *> CProcessListViewCommon::m_pListViews;
 
 wxBEGIN_EVENT_TABLE(CProcessListViewCommon, wxListCtrl)
@@ -29,6 +28,7 @@ CProcessListViewCommon::CProcessListViewCommon(wxWindow* _pParent, const wxSize&
 
 	this->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( CProcessListViewCommon::OnListItemRightClick ), NULL, this );
 	CreateContextMenu();
+
 }
 
 CProcessListViewCommon::~CProcessListViewCommon()
@@ -79,16 +79,10 @@ int wxCALLBACK CProcessListViewCommon::ListCompareFunction(wxIntPtr item1, wxInt
 	return iRet;
 }
 
-void CProcessListViewCommon::SetProcessLists()
-{
-	CProcessMonitoring* pMonitoring = (CProcessMonitoring *)theSystem->GetBaseResource(S_BASE_CLASS_PROCESS);
-	m_ProcessLists = pMonitoring->GetProcessInfo();//pProcessLists;
-}
-
 void CProcessListViewCommon::InitializeProcessList(eProcessListView _enumList)
 {
-	PINFO_CONST_ITERATOR cStartIter = m_ProcessLists.begin();
-	PINFO_CONST_ITERATOR cEndIter = m_ProcessLists.end();
+	PINFO_CONST_ITERATOR cStartIter = theSystem->GetProcessMapConstBeing();
+	PINFO_CONST_ITERATOR cEndIter = theSystem->GetProcessMapConstEnd();
 
 	int iIndex = 0;
 	if(_enumList == eTotalList)
@@ -199,17 +193,14 @@ void CProcessListViewCommon::SetTextBackgroundColor(int iIndex, float fValue, bo
 
 void CProcessListViewCommon::AddNewProcess(unsigned long ulProcessID, eProcessListView _enumList)
 {
-	PINFO_CONST_ITERATOR fIter = m_ProcessLists.find(ulProcessID);
-	if(fIter == m_ProcessLists.end())
+	SHWSYSMON_PROCESS_INFO* pNewProcess = theSystem->GetProcessInfo(ulProcessID);//m_ProcessLists.find(ulProcessID);
+	if(pNewProcess == nullptr)
 		return;
 
 	int iItemCount = this->GetItemCount();
-	SHWSYSMON_PROCESS_INFO* pNewProcess = fIter->second;
 
 	if(_enumList == eTotalList)
 	{
-		SHWSYSMON_PROCESS_INFO* pNewProcess = fIter->second;
-
 		InsertItem(iItemCount, pNewProcess->_strProcessName);
 		SetItem(iItemCount, ePID, wxString::Format(wxT("%u"), pNewProcess->_ulProcessID));
 

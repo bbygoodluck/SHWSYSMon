@@ -226,5 +226,10 @@ void CCPUSVSegmentView::OnNofityEvent(wxCommandEvent& event)
 
 void CCPUSVSegmentView::update()
 {
+	UpdateView(this, m_viewRect);
+}
 
+void CCPUSVSegmentView::SetUsageData(unsigned long _data)
+{
+	m_iPercent = _data;
 }

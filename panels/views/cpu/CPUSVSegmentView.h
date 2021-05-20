@@ -7,8 +7,9 @@ class CCPUSVSegmentView : public CViewCommon
 public:
 	explicit CCPUSVSegmentView(wxWindow* _parent, const wxSize& _size);
 	virtual ~CCPUSVSegmentView();
-	void SetCPUData(unsigned long _data);
+
 	virtual void update() override;
+	virtual void SetUsageData(unsigned long _data) override;
 
 protected:
 	virtual void Render(wxDC* pDC) override;
@@ -50,7 +51,6 @@ private:
 	wxPen m_pen;
 	wxBrush m_brush;
 
-	int m_iPercent = 0;
 
 	static int m_iSegmentNums[];
 private:

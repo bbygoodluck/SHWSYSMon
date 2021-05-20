@@ -14,6 +14,7 @@ public:
 	virtual ~CMemorySpectrumView();
 
 	virtual void update() override;
+	virtual void SetUsageData(unsigned long _data) override;
 
 protected:
 	virtual void Render(wxDC* pDC) override;

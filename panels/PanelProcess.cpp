@@ -99,7 +99,7 @@ void CPanelProcess::InitPanel()
 	this->SetSizer( m_sizerProcessMain );
 	this->Layout();
 
-	CProcessListViewCommon::SetProcessLists();
+//	CProcessListViewCommon::SetProcessLists();
 
 	CProcessListViewCommon::AddListViewItem(m_pTotalProcessList.get());
 	CProcessListViewCommon::AddListViewItem(m_pCPUProcessList.get());

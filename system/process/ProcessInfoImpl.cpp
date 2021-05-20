@@ -294,7 +294,10 @@ bool CProcessInfoImpl::DelProcess(unsigned long ulProcessID)
 		return false;
 
 	SHWSYSMON_PROCESS_INFO* pProcess = iter->second;
-	CloseHandle(pProcess->_hProcess);
+#ifdef __WXMSW__
+	if(pProcess->_hProcess)
+		CloseHandle(pProcess->_hProcess);
+#endif // __WXMSW__
 
 	delete pProcess;
 	m_mapProcesses.erase(iter);
@@ -316,9 +319,13 @@ int CProcessInfoImpl::KillProcess(unsigned long ulProcessID)
 	{
 		bool bTerminate = ::TerminateProcess(hProcess, -1);
 		if(!bTerminate)
+		{
+			CloseHandle(hProcess);
 			return KILL_PROCESS_MSG_PROCESS_TERMINATE_FAIL;
+		}
 
 		GetExitCodeProcess(hProcess, &ulRetCode);
+		CloseHandle(hProcess);
 
 		if (ulRetCode == STILL_ACTIVE)
 			return KILL_PROCESS_MSG_PROCESS_ALIVE;
@@ -328,14 +335,6 @@ int CProcessInfoImpl::KillProcess(unsigned long ulProcessID)
 	else
 		iRetCode = KILL_PROCESS_MSG_PROCESS_NULL;
 #endif // __WXMSW__
-
-	SHWSYSMON_PROCESS_INFO* pProcess = iter->second;
-
-#ifdef __WXMSW__
-	CloseHandle(pProcess->_hProcess);
-#endif // __WXMSW__
-
-	delete pProcess;
 
 	return iRetCode;
 }

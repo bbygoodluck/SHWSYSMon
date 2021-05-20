@@ -25,7 +25,20 @@ CProcessMonitoring::~CProcessMonitoring()
 
 void CProcessMonitoring::OnTimer(wxTimerEvent& event)
 {
-	notify();
+//	notify();
+#ifdef __WXMSW__
+	EnterCriticalSection(&_gCriProcess);
+#endif // __WXMSW__
+
+	m_ProcessImpl->Update();
+
+	for(auto item : m_notifyItems)
+		((CProcessListViewCommon *)item)->update();
+
+#ifdef __WXMSW__
+	LeaveCriticalSection(&_gCriProcess);
+#endif // __WXMSW__
+
 }
 
 void CProcessMonitoring::notify()
@@ -48,7 +61,7 @@ void CProcessMonitoring::AddNewProcess(unsigned long ulProcessID)
 {
 	if(m_ProcessImpl->AddNewProcess(ulProcessID))
 	{
-		CProcessListViewCommon::SetProcessLists();
+	//	CProcessListViewCommon::SetProcessLists();
 		for(auto item : m_notifyItems)
 			((CProcessListViewCommon *)item)->AddNewProcess(ulProcessID);
 	}
@@ -58,7 +71,7 @@ void CProcessMonitoring::DelProcess(unsigned long ulProcessID)
 {
 	if(m_ProcessImpl->DelProcess(ulProcessID))
 	{
-		CProcessListViewCommon::SetProcessLists();
+	//	CProcessListViewCommon::SetProcessLists();
 		for(auto item : m_notifyItems)
 			((CProcessListViewCommon *)item)->DelProcess(ulProcessID);
 	}
@@ -117,7 +130,7 @@ void CProcessMonitoring::OnProcessReload(wxCommandEvent& event)
 
 	m_ProcessImpl->AllClearAndReload();
 
-	CProcessListViewCommon::SetProcessLists();
+//	CProcessListViewCommon::SetProcessLists();
 	for(auto item : m_notifyItems)
 		((CProcessListViewCommon *)item)->reload();
 

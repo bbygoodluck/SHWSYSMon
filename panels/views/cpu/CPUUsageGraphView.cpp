@@ -77,7 +77,7 @@ void CCPUUsageGraphView::Render(wxDC* pDC)
 	int iCurXPos = iXPos;
 	int iCurYPos = CONST_ONE_SECOND_Y_HEIGHT;
 
-	wxPen pen(m_colRuler, 1, wxPENSTYLE_SHORT_DASH );
+	wxPen pen(m_colRuler, 1, wxPENSTYLE_DOT);//wxPENSTYLE_SHORT_DASH );
 	pDC->SetPen(pen);
 
 	int iRowPos = m_iViewportMaxY / 4;
@@ -187,7 +187,7 @@ void CCPUUsageGraphView::DrawGraph(wxDC* pDC)
 	}
 }
 
-void CCPUUsageGraphView::SetCPUData(unsigned long _data)
+void CCPUUsageGraphView::SetUsageData(unsigned long _data)
 {
 	m_lCPUData = _data;
 }

@@ -24,7 +24,7 @@ class CCPUUsageGraphView : public CViewCommon
 public:
 	explicit CCPUUsageGraphView(wxWindow* _parent, const wxSize& _size);
 	virtual ~CCPUUsageGraphView();
-	void SetCPUData(unsigned long _data);
+	virtual void SetUsageData(unsigned long _data) override;
 	virtual void update() override;
 
 protected:
@@ -40,7 +40,6 @@ private:
 	int m_iViewportMaxY = -1;
 	int m_iPercent = 0;
 
-	unsigned long m_lCPUData = 0;
 	GRAPH_DATA_NODE* m_headNode = nullptr;
 	GRAPH_DATA_NODE* m_tailNode = nullptr;
 

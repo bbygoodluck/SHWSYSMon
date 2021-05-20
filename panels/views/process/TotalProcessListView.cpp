@@ -67,11 +67,11 @@ void CTotalProcessListView::update()
 
 		unsigned long _ulProcessID = 0;
 		strProcessID.ToCULong(&_ulProcessID);
-		PINFO_CONST_ITERATOR fIter = m_ProcessLists.find(_ulProcessID);
-		if(fIter == m_ProcessLists.end())
+
+		SHWSYSMON_PROCESS_INFO* pProcessInfo = theSystem->GetProcessInfo(_ulProcessID);
+		if(pProcessInfo == nullptr)
 			continue;
 
-		SHWSYSMON_PROCESS_INFO* pProcessInfo = fIter->second;//theSystem->GetProcessInfo(_ulProcessID);
 		strCPUUsage = wxString::Format(wxT("%.2f%"), pProcessInfo->fCPUUsage);
 		SetItem(iIndex, eCPU, strCPUUsage);
 

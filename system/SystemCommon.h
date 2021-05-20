@@ -18,6 +18,8 @@ public:
 
 	wxString GetProcessorInfo();
 	SHWSYSMON_PROCESS_INFO* GetProcessInfo(unsigned long ulProcessID);
+	PINFO_CONST_ITERATOR GetProcessMapConstBeing();
+	PINFO_CONST_ITERATOR GetProcessMapConstEnd();
 
 	void SetMonitoringResource(CResourceCommon* pBaseInfo, int iBaseInfoIndex);
 	CResourceCommon* GetBaseResource(int iBaseInfoIndex);

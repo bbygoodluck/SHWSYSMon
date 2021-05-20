@@ -132,3 +132,7 @@ void CMemorySpectrumView::OnTimer(wxTimerEvent& event)
 {
 	UpdateView(this, m_viewRect);
 }
+
+void CMemorySpectrumView::SetUsageData(unsigned long _data)
+{
+}

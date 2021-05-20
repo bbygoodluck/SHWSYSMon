@@ -1,8 +1,7 @@
 #ifndef PROCESSLISTVIEWCOMMON_H_INCLUDED
 #define PROCESSLISTVIEWCOMMON_H_INCLUDED
 
-#include "../../system/process/ProcessMonitoring.h"
-
+//#include "../../system/process/ProcessMonitoring.h"
 class CProcessListViewCommon : public wxListView
 {
 protected:
@@ -71,7 +70,6 @@ public:
 	virtual void InitializeProcessList(eProcessListView _enumList);
 
 public:
-	static void SetProcessLists();
 	static void AddListViewItem(CProcessListViewCommon* pListView);
 
 	int GetSortingColumn() { return m_iSortingColumn; }
@@ -93,7 +91,6 @@ private:
 	void UpdateProcessInfo(unsigned long ulProcessID);
 
 public:
-	static std::unordered_map<unsigned long, SHWSYSMON_PROCESS_INFO *> m_ProcessLists;
 
 protected:
 	int m_iSortingColumn = -1;

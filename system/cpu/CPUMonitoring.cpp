@@ -3,6 +3,7 @@
 #include "CPUMonitoring.h"
 #include "../../panels/views/ViewCommon.h"//cpu/CPUUsageGraphView.h"
 
+
 wxBEGIN_EVENT_TABLE(CCPUMonitoring, CResourceCommon)
 	EVT_TIMER(ENUM_CPU_TIMER_ID, CCPUMonitoring::OnTimer)
 wxEND_EVENT_TABLE()
@@ -120,21 +121,23 @@ void CCPUMonitoring::UpdateCPUUsage()
 void CCPUMonitoring::notify()
 {
 	int iCpuCore = 0;
-	int iCPUUsage = 0;
 	for(auto item : m_notifyItems)
 	{
 		if(m_vecCPUUsage.size() == 0)
 			continue;
 
-		iCpuCore = ((CViewCommon *)item)->GetCPUCoreNumber();
-		iCPUUsage = wx_static_cast(int, m_vecCPUUsage.at(iCpuCore));
+		CViewCommon* pView = (CViewCommon *)item;
+		iCpuCore = pView->GetCPUCoreNumber();
 
-		wxCommandEvent evt(wxEVT_EVENT_NOTIFY_GRAPHVIEW);
-		evt.SetInt(iCPUUsage);
+		pView->SetUsageData(m_vecCPUUsage.at(iCpuCore));
+		pView->update();
 
-		wxQueueEvent(item, evt.Clone());
-		//직접 갱신호출 -> 이벤트 처리
-	//	((CCPUUsageGraphView *)item)->SetCPUData(m_vecCPUUsage.at(iCpuCore));
-	//	((CCPUUsageGraphView *)item)->update();
+	//	int iCPUUsage = wx_static_cast(int, m_vecCPUUsage.at(iCpuCore));
+	//	wxCommandEvent evt(wxEVT_EVENT_NOTIFY_GRAPHVIEW);
+
+	//	evt.SetInt(iCPUUsage);
+	//	wxPostEvent(item, evt);
+
+	//	wxQueueEvent(item, evt.Clone());
 	}
 }

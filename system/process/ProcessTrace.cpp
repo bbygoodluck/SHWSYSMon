@@ -26,6 +26,9 @@ CProcessTrace::~CProcessTrace()
 	SafeRelease(&m_pDelStubUnk);
 	SafeRelease(&m_pDelEventSink);
 	SafeRelease(&m_pDelSinkStub);
+
+	delete m_pAddEventSink;
+	delete m_pDelEventSink;
 }
 
 bool CProcessTrace::Init()
